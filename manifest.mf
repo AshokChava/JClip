@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Class-Path: lib/derby.jar
+Main-Class: jdesktoplaunch.main.Entry
+
+
