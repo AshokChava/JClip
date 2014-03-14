@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.indianhippy.data;
+package com.indianhippy.jclip.data;
 
 /**
  *
@@ -38,7 +38,7 @@ public class ClipBoardHistoryStore {
     }
     public void setDBSystemDir() {
     String userHomeDir = System.getProperty("user.home", ".");
-    String systemDir = userHomeDir + "/.clipboardHistry";
+    String systemDir = userHomeDir + "/.clipHistry";
         // Set the db system directory.
     System.setProperty("derby.system.home", systemDir);
 }

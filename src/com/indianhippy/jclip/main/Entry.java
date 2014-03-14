@@ -4,11 +4,11 @@
  * and open the template in the editor.
  */
 
-package jdesktoplaunch.main;
+package com.indianhippy.jclip.main;
 
 import javax.swing.SwingUtilities;
-import jdesktoplaunch.scheduler.ClipAddingScheduler;
-import jdesktoplaunch.ui.MainFrame;
+import com.indianhippy.jclip.scheduler.ClipAddingScheduler;
+import com.indianhippy.jclip.ui.MainFrame;
 
 /**
  *

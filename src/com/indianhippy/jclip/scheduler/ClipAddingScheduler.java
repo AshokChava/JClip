@@ -1,7 +1,7 @@
-package jdesktoplaunch.scheduler;
+package com.indianhippy.jclip.scheduler;
 import java.util.Timer;
 import java.util.TimerTask;
-import jdesktoplaunch.ui.MainFrame;
+import com.indianhippy.jclip.ui.MainFrame;
 
 public class ClipAddingScheduler {
     Timer timer;

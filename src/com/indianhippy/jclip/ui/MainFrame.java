@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package jdesktoplaunch.ui;
+package com.indianhippy.jclip.ui;
 
 import java.awt.AWTException;
 import java.awt.Image;
@@ -26,8 +26,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
-import com.indianhippy.data.ClipBoardHistoryStore;
-import jdesktoplaunch.helper.ClipBoardManager;
+import com.indianhippy.jclip.data.ClipBoardHistoryStore;
+import com.indianhippy.jclip.helper.ClipBoardManager;
 
 /**
  *
