@@ -13,7 +13,6 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -28,6 +27,8 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import com.indianhippy.jclip.data.ClipBoardHistoryStore;
 import com.indianhippy.jclip.helper.ClipBoardManager;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -41,7 +42,10 @@ public class MainFrame extends javax.swing.JFrame {
     ClipBoardHistoryStore clipHisDB=new ClipBoardHistoryStore();
     ClipBoardManager cboardmgr=new ClipBoardManager();
     public MainFrame() {
+        
+        
         initComponents();
+        setAppIcon();
         jTablePopMenuCurrentClips();
         jTablePopMenuForOldClips();
         setLookAndFeel();
@@ -50,7 +54,15 @@ public class MainFrame extends javax.swing.JFrame {
            
             
     }
-   
+    private void setAppIcon(){
+        try{
+        ImageIcon icon=new ImageIcon(ImageIO.read(getClass().getClassLoader().getResourceAsStream("images/icon.png")));
+        this.setIconImage(icon.getImage());
+        this.setSize(100, 100);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     private void setLookAndFeel(){
           try{
         UIManager.setLookAndFeel(
@@ -69,16 +81,42 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jTablePane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         clipBoardCurrentTable = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        findText = new javax.swing.JTextField();
+        findButton = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        findResultTable = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         clipHistoryTable = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         oldHistoryTable = new javax.swing.JTable();
 
-        setTitle("JDesktopTools");
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane5.setViewportView(jTable1);
+
+        setTitle("JClip");
         setLocationByPlatform(true);
+        setMaximumSize(new java.awt.Dimension(500000, 500000));
+        setPreferredSize(new java.awt.Dimension(500, 500));
         addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 formFocusLost(evt);
@@ -137,6 +175,78 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         jTablePane1.addTab("ClipBoard", jScrollPane1);
+
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
+
+        jLabel1.setText("Search");
+        jPanel2.add(jLabel1);
+
+        findText.setMinimumSize(new java.awt.Dimension(100, 20));
+        findText.setPreferredSize(new java.awt.Dimension(200, 20));
+        findText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                findTextActionPerformed(evt);
+            }
+        });
+        findText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                findTextKeyPressed(evt);
+            }
+        });
+        jPanel2.add(findText);
+
+        findButton.setText("Find");
+        findButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                findButtonActionPerformed(evt);
+            }
+        });
+        jPanel2.add(findButton);
+
+        jPanel1.add(jPanel2);
+
+        jPanel3.setLayout(new java.awt.GridLayout());
+
+        findResultTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Clip", "Date"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane6.setViewportView(findResultTable);
+        if (findResultTable.getColumnModel().getColumnCount() > 0) {
+            findResultTable.getColumnModel().getColumn(1).setMinWidth(100);
+            findResultTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+            findResultTable.getColumnModel().getColumn(1).setMaxWidth(200);
+        }
+
+        jPanel3.add(jScrollPane6);
+
+        jPanel1.add(jPanel3);
+
+        jScrollPane4.setViewportView(jPanel1);
+
+        jTablePane1.addTab("Find", jScrollPane4);
 
         clipHistoryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -223,9 +333,11 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void formFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusLost
         // TODO add your handling code here:
-         //setVisible(false);
+         this.setVisible(false);
+         this.dispose();
+         
          try{
-         String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor); 
+         //String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor); 
          //System.out.println(data);
          }catch(Exception e){
              System.out.println(e);
@@ -266,7 +378,7 @@ public class MainFrame extends javax.swing.JFrame {
                     oldHistoryTable.setValueAt(key, i, 0);
                     oldHistoryTable.setValueAt(timeStampStr, i, 2);
                     
-                   jTablePane1.setTitleAt(2, clipHistoryTable.getValueAt(clipHistoryTable.getSelectedRow(), clipHistoryTable.getSelectedColumn()).toString());
+                   jTablePane1.setTitleAt(3, clipHistoryTable.getValueAt(clipHistoryTable.getSelectedRow(), clipHistoryTable.getSelectedColumn()).toString());
                     
                     i++;
                 }catch(Exception sqle){
@@ -307,6 +419,20 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_oldHistoryTableMouseClicked
 
+    private void findButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findButtonActionPerformed
+        startSearching();
+    }//GEN-LAST:event_findButtonActionPerformed
+
+    private void findTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_findTextActionPerformed
+
+    private void findTextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_findTextKeyPressed
+        if(evt.getKeyCode()==10){
+            startSearching();
+        }
+    }//GEN-LAST:event_findTextKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -341,13 +467,40 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
     }
+    private void startSearching(){
+        if(!findText.getText().equals("")){
+           LinkedHashMap findResult[]=clipHisDB.findClipInDB(findText.getText());
+            if(findResult!=null && findResult.length>1){
+            LinkedHashMap<String,String> data=findResult[0];
+            LinkedHashMap<String,String> timeStamp=findResult[1];
+            Set<String> keys=data.keySet();
+            int i=0;
+            DefaultTableModel model1 = (DefaultTableModel)findResultTable.getModel();
+            model1.setRowCount(keys.size()+1);
+            for(String key:keys){
+                String dataValue=data.get(key);
+                String timeStampStr=timeStamp.get(key);
+                try{
+                    
+                    findResultTable.setValueAt(dataValue, i, 0);
+                    findResultTable.setValueAt(timeStampStr, i, 1);
+                    
+                    i++;
+                }catch(Exception sqle){
+                    sqle.printStackTrace();
+                }
+            }
+            
+        }
+        }
+    }
     public  void createSystemTrayIcon() {
 
     if (SystemTray.isSupported()) {
         SystemTray tray = SystemTray.getSystemTray();
         Image image =
             Toolkit.getDefaultToolkit()
-            .getImage(getClass().getClassLoader().getResource("images/download.jpg"));
+            .getImage(getClass().getClassLoader().getResource("images/icon.png"));
 
         PopupMenu popup = new PopupMenu();
 
@@ -553,10 +706,21 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable clipBoardCurrentTable;
     private javax.swing.JTable clipHistoryTable;
+    private javax.swing.JButton findButton;
+    private javax.swing.JTable findResultTable;
+    private javax.swing.JTextField findText;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTabbedPane jTablePane1;
     private javax.swing.JTable oldHistoryTable;
     // End of variables declaration//GEN-END:variables

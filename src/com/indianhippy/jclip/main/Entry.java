@@ -23,7 +23,7 @@ public class Entry  {
         @Override
         public void run() {
             MainFrame frame = new MainFrame();
-           ClipAddingScheduler cSche=new ClipAddingScheduler(frame,5);
+           ClipAddingScheduler cSche=new ClipAddingScheduler(frame,2);
           
             frame.pack();
             frame.setVisible(true);
