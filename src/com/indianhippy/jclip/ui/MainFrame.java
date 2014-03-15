@@ -27,6 +27,7 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import com.indianhippy.jclip.data.ClipBoardHistoryStore;
 import com.indianhippy.jclip.helper.ClipBoardManager;
+import java.awt.Color;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
@@ -48,6 +49,7 @@ public class MainFrame extends javax.swing.JFrame {
         setAppIcon();
         jTablePopMenuCurrentClips();
         jTablePopMenuForOldClips();
+        
         setLookAndFeel();
         createSystemTrayIcon();
       
@@ -98,7 +100,7 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         clipHistoryTable = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        oldHistoryTable = new javax.swing.JTable();
+        oldClipsTable = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -115,8 +117,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         setTitle("JClip");
         setLocationByPlatform(true);
-        setMaximumSize(new java.awt.Dimension(500000, 500000));
-        setPreferredSize(new java.awt.Dimension(500, 500));
         addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 formFocusLost(evt);
@@ -205,7 +205,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2);
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         findResultTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -231,6 +231,11 @@ public class MainFrame extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        findResultTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                findResultTableMouseClicked(evt);
             }
         });
         jScrollPane6.setViewportView(findResultTable);
@@ -283,7 +288,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jTablePane1.addTab("ClipBoardHistory", jScrollPane2);
 
-        oldHistoryTable.setModel(new javax.swing.table.DefaultTableModel(
+        oldClipsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -309,19 +314,19 @@ public class MainFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        oldHistoryTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        oldClipsTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                oldHistoryTableMouseClicked(evt);
+                oldClipsTableMouseClicked(evt);
             }
         });
-        jScrollPane3.setViewportView(oldHistoryTable);
-        if (oldHistoryTable.getColumnModel().getColumnCount() > 0) {
-            oldHistoryTable.getColumnModel().getColumn(0).setMinWidth(20);
-            oldHistoryTable.getColumnModel().getColumn(0).setPreferredWidth(30);
-            oldHistoryTable.getColumnModel().getColumn(0).setMaxWidth(30);
-            oldHistoryTable.getColumnModel().getColumn(2).setMinWidth(100);
-            oldHistoryTable.getColumnModel().getColumn(2).setPreferredWidth(100);
-            oldHistoryTable.getColumnModel().getColumn(2).setMaxWidth(200);
+        jScrollPane3.setViewportView(oldClipsTable);
+        if (oldClipsTable.getColumnModel().getColumnCount() > 0) {
+            oldClipsTable.getColumnModel().getColumn(0).setMinWidth(20);
+            oldClipsTable.getColumnModel().getColumn(0).setPreferredWidth(30);
+            oldClipsTable.getColumnModel().getColumn(0).setMaxWidth(30);
+            oldClipsTable.getColumnModel().getColumn(2).setMinWidth(100);
+            oldClipsTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+            oldClipsTable.getColumnModel().getColumn(2).setMaxWidth(200);
         }
 
         jTablePane1.addTab("Old ClipBoard", jScrollPane3);
@@ -364,7 +369,7 @@ public class MainFrame extends javax.swing.JFrame {
             LinkedHashMap<String,String> timeStamp=output[1];
             Set<String> keys=data.keySet();
             int i=0;
-             DefaultTableModel model1 = (DefaultTableModel)oldHistoryTable.getModel();
+             DefaultTableModel model1 = (DefaultTableModel)oldClipsTable.getModel();
              for(int j=0;j<model1.getRowCount();j++){
                 model1.removeRow(j);
              }
@@ -374,9 +379,9 @@ public class MainFrame extends javax.swing.JFrame {
                 String timeStampStr=timeStamp.get(key);
                 try{
                     
-                    oldHistoryTable.setValueAt(dataValue, i, 1);
-                    oldHistoryTable.setValueAt(key, i, 0);
-                    oldHistoryTable.setValueAt(timeStampStr, i, 2);
+                    oldClipsTable.setValueAt(dataValue, i, 1);
+                    oldClipsTable.setValueAt(key, i, 0);
+                    oldClipsTable.setValueAt(timeStampStr, i, 2);
                     
                    jTablePane1.setTitleAt(3, clipHistoryTable.getValueAt(clipHistoryTable.getSelectedRow(), clipHistoryTable.getSelectedColumn()).toString());
                     
@@ -401,23 +406,25 @@ public class MainFrame extends javax.swing.JFrame {
                     String myDate = DateFormat.getDateInstance(DateFormat.SHORT).format(new Date());
                     clipHisDB.deleteRowFromTable("ClipHistory"+myDate.replaceAll("/", "_"), clipBoardCurrentTable.getValueAt(clipBoardCurrentTable.getSelectedRow(), 0).toString(), clipBoardCurrentTable.getValueAt(clipBoardCurrentTable.getSelectedRow(), 1).toString());
                    model.removeRow(clipBoardCurrentTable.getSelectedRow());
+                   
                    addFromClipBoard();
              }
         }
     }//GEN-LAST:event_clipBoardCurrentTableMouseClicked
 
-    private void oldHistoryTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_oldHistoryTableMouseClicked
+    private void oldClipsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_oldClipsTableMouseClicked
          if(evt.getClickCount()==2){
-            DefaultTableModel model = (DefaultTableModel)oldHistoryTable.getModel();
-             if(oldHistoryTable.getSelectedRow()>=0){
-                   cboardmgr.setClipboardContents(oldHistoryTable.getValueAt(oldHistoryTable.getSelectedRow(), 1).toString());
+            DefaultTableModel model = (DefaultTableModel)oldClipsTable.getModel();
+             if(oldClipsTable.getSelectedRow()>=0){
+                   cboardmgr.setClipboardContents(oldClipsTable.getValueAt(oldClipsTable.getSelectedRow(), 1).toString());
+                   
                    // String myDate = DateFormat.getDateInstance(DateFormat.SHORT).format(new Date());
-                  //clipHisDB.deleteRowFromTableBasedOnID("ClipHistory"+myDate.replaceAll("/", "_"), oldHistoryTable.getValueAt(oldHistoryTable.getSelectedRow(), 0).toString());
+                  //clipHisDB.deleteRowFromTableBasedOnID("ClipHistory"+myDate.replaceAll("/", "_"), oldClipsTable.getValueAt(oldClipsTable.getSelectedRow(), 0).toString());
                   //model.removeRow(clipBoardCurrentTable.getSelectedRow());
                   //addFromClipBoard();
              }
         }
-    }//GEN-LAST:event_oldHistoryTableMouseClicked
+    }//GEN-LAST:event_oldClipsTableMouseClicked
 
     private void findButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findButtonActionPerformed
         startSearching();
@@ -432,6 +439,16 @@ public class MainFrame extends javax.swing.JFrame {
             startSearching();
         }
     }//GEN-LAST:event_findTextKeyPressed
+
+    private void findResultTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_findResultTableMouseClicked
+            if(evt.getClickCount()==2){
+            DefaultTableModel model = (DefaultTableModel)findResultTable.getModel();
+             if(findResultTable.getSelectedRow()>=0){
+                   cboardmgr.setClipboardContents(findResultTable.getValueAt(findResultTable.getSelectedRow(), 0).toString());
+                 
+             }
+        }
+    }//GEN-LAST:event_findResultTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -612,19 +629,20 @@ public class MainFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //System.out.println(clipBoardCurrentTable.getSelectedRow());
-                DefaultTableModel model = (DefaultTableModel)oldHistoryTable.getModel();
-                if(oldHistoryTable.getSelectedRow()>=0){
+                DefaultTableModel model = (DefaultTableModel)oldClipsTable.getModel();
+                if(oldClipsTable.getSelectedRow()>=0){
                     //System.out.println(clipBoardCurrentTable.getSelectedRow());
                     
                     String myDate = DateFormat.getDateInstance(DateFormat.SHORT).format(new Date());
-                    clipHisDB.deleteRowFromTable("ClipHistory"+myDate.replaceAll("/", "_"), oldHistoryTable.getValueAt(oldHistoryTable.getSelectedRow(), 1).toString(), oldHistoryTable.getValueAt(oldHistoryTable.getSelectedRow(), 2).toString());
-                    model.removeRow(oldHistoryTable.getSelectedRow());
+                    clipHisDB.deleteRowFromTable(clipHistoryTable.getValueAt(oldClipsTable.getSelectedRow(),0).toString(), oldClipsTable.getValueAt(oldClipsTable.getSelectedRow(), 1).toString(), oldClipsTable.getValueAt(oldClipsTable.getSelectedRow(), 2).toString());
+                    model.removeRow(oldClipsTable.getSelectedRow());
                 }
             }
         });
         popupMenu1.add(deleteItem1);
-        oldHistoryTable.setComponentPopupMenu(popupMenu1);
+        oldClipsTable.setComponentPopupMenu(popupMenu1);
     }
+ 
     private void showClipsInCurrent(){
            String myDate = DateFormat.getDateInstance(DateFormat.SHORT).format(new Date());
           LinkedHashMap output[]=clipHisDB.getValuesFromTable("ClipHistory"+myDate.replaceAll("/", "_"));
@@ -722,6 +740,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable jTable1;
     private javax.swing.JTabbedPane jTablePane1;
-    private javax.swing.JTable oldHistoryTable;
+    private javax.swing.JTable oldClipsTable;
     // End of variables declaration//GEN-END:variables
 }

@@ -116,7 +116,7 @@ public class ClipBoardHistoryStore {
          
         try(
              Statement stat = getConnection().createStatement();
-             ResultSet rs = stat.executeQuery("select * from "+tableName+" WHERE CAST(cliptext AS LONG VARCHAR) LIKE '%"+findStr+"%' order by ID desc");    
+             ResultSet rs = stat.executeQuery("select * from "+tableName+" WHERE lower(CAST(cliptext AS LONG VARCHAR)) LIKE lower('%"+findStr+"%') order by ID desc");    
            ){
         LinkedHashMap clipsFromTableData=new LinkedHashMap<String,String>();
         LinkedHashMap clipsFromTableTimestamp=new LinkedHashMap<String,String>();
