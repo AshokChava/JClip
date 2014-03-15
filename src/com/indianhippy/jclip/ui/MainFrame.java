@@ -161,6 +161,7 @@ public class MainFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        clipBoardCurrentTable.setRowHeight(20);
         clipBoardCurrentTable.getTableHeader().setReorderingAllowed(false);
         clipBoardCurrentTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -233,6 +234,7 @@ public class MainFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        findResultTable.setRowHeight(20);
         findResultTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 findResultTableMouseClicked(evt);
@@ -279,6 +281,7 @@ public class MainFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        clipHistoryTable.setRowHeight(20);
         clipHistoryTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 clipHistoryTableMouseClicked(evt);
@@ -314,6 +317,7 @@ public class MainFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        oldClipsTable.setRowHeight(20);
         oldClipsTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 oldClipsTableMouseClicked(evt);
@@ -634,7 +638,7 @@ public class MainFrame extends javax.swing.JFrame {
                     //System.out.println(clipBoardCurrentTable.getSelectedRow());
                     
                     String myDate = DateFormat.getDateInstance(DateFormat.SHORT).format(new Date());
-                    clipHisDB.deleteRowFromTable(clipHistoryTable.getValueAt(oldClipsTable.getSelectedRow(),0).toString(), oldClipsTable.getValueAt(oldClipsTable.getSelectedRow(), 1).toString(), oldClipsTable.getValueAt(oldClipsTable.getSelectedRow(), 2).toString());
+                    clipHisDB.deleteRowFromTable(clipHistoryTable.getValueAt(clipHistoryTable.getSelectedRow(),0).toString(), oldClipsTable.getValueAt(oldClipsTable.getSelectedRow(), 1).toString(), oldClipsTable.getValueAt(oldClipsTable.getSelectedRow(), 2).toString());
                     model.removeRow(oldClipsTable.getSelectedRow());
                 }
             }

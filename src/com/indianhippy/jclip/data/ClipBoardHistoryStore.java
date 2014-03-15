@@ -85,7 +85,9 @@ public class ClipBoardHistoryStore {
         try(
                 Statement stat = getConnection().createStatement();
             ){
-            stat.executeUpdate("create table "+tableName+" (ID INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),cliptext CLOB,clipimage blob,timestamp VARCHAR(100))");
+            if(checkTableExists(tableName)==false){
+                stat.executeUpdate("create table "+tableName+" (ID INTEGER NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),cliptext CLOB,clipimage blob,timestamp VARCHAR(100))");
+            }
         }catch(Exception e){
             System.out.println("Table already exists");
         }
@@ -111,6 +113,25 @@ public class ClipBoardHistoryStore {
             e.printStackTrace();
         }
         return null;
+    }
+    private boolean checkTableExists(String tableName){
+         try(
+                Statement stat = getConnection().createStatement();
+                ResultSet rs = stat.executeQuery("select tablename from sys.systables where tablename like '"+tableName+"' order by tablename desc");
+           ){
+                
+                if(rs.next()){
+                    
+                    return(false);
+                }else{
+                    return(true);
+                }
+                
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return true;
     }
      public LinkedHashMap[] getValuesFromTable(String tableName,String findStr){
          
